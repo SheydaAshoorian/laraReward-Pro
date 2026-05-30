@@ -23,7 +23,10 @@ class RegisterUserAction
 
             $user->increment('points_balance', 100);
 
-
+            $user->pointLogs()->create([
+                'points' => 100,
+                'reason' => 'Welcome Bonus',
+            ]);
             return $user;
         });
     }

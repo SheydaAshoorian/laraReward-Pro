@@ -7,12 +7,17 @@ use Illuminate\Validation\Rules\Password;
 
 class RegisterRequest extends FormRequest
 {
-
+    /**
+     * تعیین سطح دسترسی (برای همه آزاد است)
+     */
     public function authorize(): bool
     {
         return true;
     }
 
+    /**
+     * قوانین اعتبارسنجی ثبت‌نام
+     */
     public function rules(): array
     {
         return [
@@ -22,9 +27,9 @@ class RegisterRequest extends FormRequest
                 'required',
                 'string',
                 Password::min(8)
-                    ->mixedCase() // اجبار حروف کوچک و بزرگ
-                    ->numbers()   // اجبار عدد
-                    ->symbols()   // اجبار کاراکتر خاص
+                    ->mixedCase()
+                    ->numbers()
+                    ->symbols()
             ],
         ];
     }

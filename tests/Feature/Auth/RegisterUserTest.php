@@ -10,7 +10,7 @@ it('can register a user and assign 100 welcome points', function () {
     $userData = [
         'name' => 'Ali Alavi',
         'email' => 'ali@example.com',
-        'password' => 'password123',
+        'password' => 'Secret123',
     ];
 
     $response = postJson('/api/register', $userData);

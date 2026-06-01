@@ -18,10 +18,9 @@ class SpendPointsController extends Controller
         ]);
 
         try {
-            // در آینده کاربر را از لاراول سنکتوم (آتنتیکیت شده) می‌گیریم
-            // فعلاً برای تست، کاربر اول دیتابیس را فرض می‌گیریم
-            $user = \App\Models\User::first(); 
-
+          
+            $user = $request->user();
+            
             if (!$user) {
                 return response()->json(['error' => 'User not found'], 404);
             }

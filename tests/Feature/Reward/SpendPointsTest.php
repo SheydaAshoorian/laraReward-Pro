@@ -15,7 +15,7 @@ it('deducts points successfully when user has enough balance', function () {
 
     $response = postJson('/api/spend-points', [
         'points' => 80,
-        'item_name' => 'Lucky Wheel Ticket'
+        'item_name' => 'کد تخفیف دیجی‌کالا'
     ]);
 
 

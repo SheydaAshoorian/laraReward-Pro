@@ -4,36 +4,27 @@ namespace App\Http\Controllers\Reward;
 
 use App\Http\Controllers\Controller;
 use App\Actions\DeductPointsAction;
-use Illuminate\Http\Request;
+use App\Http\Requests\Reward\SpendPointsRequest;
 use Illuminate\Http\JsonResponse;
-use Exception;
 
 class SpendPointsController extends Controller
 {
-    public function __invoke(Request $request, DeductPointsAction $deductAction): JsonResponse
+    /**
+     * کسر امتیاز کاربر و خرید جایزه (بدون try-catch دستی)
+     */
+    public function __invoke(SpendPointsRequest $request, DeductPointsAction $deductAction): JsonResponse
     {
-        $request->validate([
-            'points' => 'required|integer|min:1',
-            'item_name' => 'required|string'
-        ]);
 
-        try {
-          
-            $user = $request->user();
-            
-            if (!$user) {
-                return response()->json(['error' => 'User not found'], 404);
-            }
+    $result = $deductAction->execute(
+            $request->user(),
+            $request->validated()['points'],
+            $request->validated()['item_name']
+        );
 
-            $deductAction->execute($user, (int) $request->points, "Purchased: " . $request->item_name);
-
-            return response()->json([
-                'message' => 'امتیاز با موفقیت کسر شد و جایزه خریداری شد.',
-                'current_points' => $user->fresh()->points_balance
-            ]);
-
-        } catch (Exception $e) {
-            return response()->json(['error' => $e->getMessage()], 422);
-        }
+        return response()->json([
+            'status' => 'success',
+            'message' => 'امتیاز با موفقیت کسر شد و کد تخفیف شما صادر گردید.',
+            'data' => $result
+        ], 200);
     }
 }

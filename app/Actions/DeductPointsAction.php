@@ -7,22 +7,23 @@ namespace App\Actions;
 use App\Models\User;
 use Exception;
 use Illuminate\Support\Facades\DB;
+use App\Exceptions\InsufficientPointsException;
 
 class DeductPointsAction
 {
 
 
-    public function execute(User $user, int $points, string $reason): void
+    public function execute(User $user, int $points, string $reason): array
     {
 
-    DB::transaction(function () use ($user, $points, $reason) {
+    return DB::transaction(function () use ($user, $points, $reason) {
             
 
     $lockedUser = User::where('id', $user->id)->lockForUpdate()->first();
 
 
     if ($lockedUser->points_balance < $points) {
-                throw new Exception('امتیاز شما کافی نیست.');
+                throw new InsufficientPointsException();
             }
 
 
@@ -33,6 +34,9 @@ class DeductPointsAction
                 'points' => -$points,
                 'reason' => $reason,
             ]);
+
+
+  
         });
     }
 }

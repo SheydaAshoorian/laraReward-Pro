@@ -21,7 +21,7 @@ class CouponPolicy
      */
     public function view(User $user, Coupon $coupon): bool
     {
-        return ;
+        return $user->id === $coupon->user_id;
     }
 
     /**

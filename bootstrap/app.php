@@ -4,7 +4,7 @@ use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use Illuminate\Http\Request;
-
+use App\Exceptions\InsufficientPointsException; 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
         web: __DIR__.'/../routes/web.php',
@@ -19,4 +19,24 @@ return Application::configure(basePath: dirname(__DIR__))
         $exceptions->shouldRenderJsonWhen(
             fn (Request $request) => $request->is('api/*'),
         );
+
+    $exceptions->render(function (InsufficientPointsException $e, $request) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $e->getMessage()
+            ], 400);
+        
+    });
+
+
+    $exceptions->render(function (\Illuminate\Auth\Access\AuthorizationException $e, $request) {
+        return response()->json([
+            'status' => 'forbidden',
+            'message' => 'شما اجازه دسترسی به این منبع را ندارید.'
+        ], 403);
+    });
+
     })->create();
+
+
+    

@@ -23,7 +23,6 @@ class CreateOrderAction
      */
     public function execute(User $user, array $cartItems): Order
     {
-        // شروع تراکنش امن دیتابیس - استاندارد سینیوری
         return DB::transaction(function () use ($user, $cartItems) {
             
             // 🔒 گام ۱: قفل کردن ردیف کاربر در دیتابیس برای جلوگیری از Race Condition

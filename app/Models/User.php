@@ -31,6 +31,8 @@ class User extends Authenticatable implements MustVerifyEmail{
         'email',
         'password',
         'points_balance',
+        'blocked_points', 
+        'pending_points', 
     ];
 
     

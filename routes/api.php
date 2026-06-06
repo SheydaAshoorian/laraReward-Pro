@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Reward\ShowCouponController;
 use App\Http\Controllers\Reward\SpendPointsController;
 
@@ -26,5 +27,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/my-coupons', UserCouponsController::class);
     
     Route::get('/coupons/{coupon}', ShowCouponController::class);
+
+    Route::post('/orders', [OrderController::class, 'store']);
 
 });

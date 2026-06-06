@@ -10,6 +10,7 @@ class Order extends Model
 {
     use HasFactory;
 
+    // فیلدهایی که اجازه داریم به صورت انبوه (Mass Assignment) پر کنیم
     protected $fillable = [
         'user_id',
         'total_amount',

@@ -9,9 +9,7 @@ use Illuminate\Http\JsonResponse;
 
 class SpendPointsController extends Controller
 {
-    /**
-     * کسر امتیاز کاربر و خرید جایزه (بدون try-catch دستی)
-     */
+    
     public function __invoke(SpendPointsRequest $request, DeductPointsAction $deductAction): JsonResponse
     {
 

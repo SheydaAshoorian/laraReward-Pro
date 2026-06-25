@@ -8,7 +8,6 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Coupon extends Model
 {
-    // فیلدهایی که اجازه ثبت انبوه (Mass Assignment) دارند
     protected $fillable = [
         'user_id',
         'code',
@@ -17,7 +16,6 @@ class Coupon extends Model
         'is_used',
     ];
 
-    // مشخص کردن اینکه تاریخ انقضا باید به صورت شیء کربن (Carbon) یا دیت‌تایم خوانده شود
     protected $casts = [
         'expires_at' => 'datetime',
         'is_used' => 'boolean',

@@ -11,7 +11,6 @@ class RegisterController extends Controller
 {
     public function __invoke(RegisterRequest $request, RegisterUserAction $registerAction): JsonResponse
     {
-        // دیتای ولیدیت شده و تمیز رو به اکشن پاس میدیم
         $user = $registerAction->execute($request->validated());
 
         return response()->json([

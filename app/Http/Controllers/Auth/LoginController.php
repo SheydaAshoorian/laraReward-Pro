@@ -20,14 +20,12 @@ class LoginController extends Controller
 
         $user = User::where('email', $request->email)->first();
 
-        // بررسی صحت پسورد
         if (! $user || ! Hash::check($request->password, $user->password)) {
             throw ValidationException::withMessages([
                 'email' => ['مشخصات وارد شده با اطلاعات ما همخوانی ندارد.'],
             ]);
         }
 
-        // ایجاد یک توکن متن‌باز برای این کاربر
         $token = $user->createToken('nextjs-auth-token')->plainTextToken;
 
         return response()->json([

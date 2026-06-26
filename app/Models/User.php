@@ -9,24 +9,43 @@ use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Laravel\Sanctum\HasApiTokens;
+
 
 #[Fillable(['name', 'email', 'password'])]
 #[Hidden(['password', 'remember_token'])]
-class User extends Authenticatable
-{
+
+class User extends Authenticatable implements MustVerifyEmail{
     /** @use HasFactory<UserFactory> */
-    use HasFactory, Notifiable;
+    use HasApiTokens, Notifiable;
 
     /**
      * Get the attributes that should be cast.
      *
      * @return array<string, string>
      */
+
+    protected $fillable = [
+        'name',
+        'email',
+        'password',
+        'points_balance',
+        'blocked_points', 
+        'pending_points', 
+    ];
+
+    
     protected function casts(): array
     {
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function pointLogs()
+    {
+        return $this->hasMany(PointLog::class);
     }
 }

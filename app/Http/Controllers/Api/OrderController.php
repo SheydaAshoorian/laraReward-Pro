@@ -1,0 +1,50 @@
+<?php
+
+namespace App\Http\Controllers\Api;
+use Illuminate\Support\Facades\Log;
+use App\Http\Controllers\Controller;
+use App\Actions\Order\CreateOrderAction;
+use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
+use Exception;
+
+class OrderController extends Controller
+{
+    public function __construct(
+        protected CreateOrderAction $createOrderAction
+    ) {}
+
+    public function store(Request $request): JsonResponse
+    {
+        $validated = $request->validate([
+            'items' => 'required|array',
+            'items.*.id' => 'required|integer',
+            'items.*.quantity' => 'required|integer|min:1',
+        ]);
+
+        try {
+            $order = $this->createOrderAction->execute(
+                $request->user(), 
+                $validated['items']
+            );
+
+            return response()->json([
+                'success' => true,
+                'message' => 'سفارش با موفقیت ثبت شد و امتیازات موقتاً بلوکه شدند.',
+                'order_id' => $order->id,
+                'payment_url' => route('payment.redirect', ['order' => $order->id])
+            ], 201);
+
+        } catch (Exception $e) {
+            
+       
+            Log::error('خطا در ثبت سفارش: ' . $e->getMessage());
+
+            return response()->json([
+                'success' => false,
+                'message' => 'متأسفانه در فرآیند ثبت سفارش خطایی رخ داده است. لطفاً مجدداً تلاش کنید.',
+                'error_dev' => config('app.debug') ? $e->getMessage() : null 
+            ], 500);
+        }
+    }
+}
